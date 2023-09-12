@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { validateInput } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const email = useRef("");
+  const password = useRef("");
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    const message = validateInput(password.current.value);
+    setErrorMessage(message);
+  };
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
@@ -30,19 +38,24 @@ const Login = () => {
           />
         )}
         <input
-          type="text"
+          type="email"
+          ref={email}
           placeholder="Email Address"
           className=" w-full p-4 my-4 bg-gray-700"
         />
         <input
           type="password"
+          ref={password}
           placeholder="Password"
           className="w-full p-4 my-4 bg-gray-700"
         />
-        <button className="p-4 my-6 bg-red-700 w-full rounded-lg">
+        <button
+          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+          onClick={handleButtonClick}
+        >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-
+        <p className=" text-red-600 py-4">{errorMessage} </p>
         <p className="py-4">
           {!isSignInForm ? "Already a User? " : "New to Netflix? "}
           <button type="button" onClick={toggleSignInForm}>
